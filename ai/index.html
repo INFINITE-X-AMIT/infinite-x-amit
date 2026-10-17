@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#060811">
+<meta name="description" content="Infinite X AI — your personal AI assistant for learning, coding and ideas.">
+<title>Infinite X AI | Personal Assistant</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+:root{color-scheme:dark;--bg:#060811;--panel:#0c1120;--line:#202b42;--text:#edf3ff;--muted:#9aa9c5;--cyan:#62f5df;--blue:#7ba9ff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 50% 0%,#14213d 0,transparent 48%),var(--bg);color:var(--text);font:15px/1.6 system-ui,Segoe UI,sans-serif;min-height:100vh}
+button,textarea{font:inherit}
+button{cursor:pointer}
+header{height:70px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,calc((100% - 1100px)/2));background:#060811e8;position:sticky;top:0;z-index:2;backdrop-filter:blur(16px)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.04em}
+.logo{width:39px;height:39px;border:1px solid #38cfc6;border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-size:24px;box-shadow:0 0 25px #29dcca18}
+.brand small{display:block;color:var(--muted);font-size:10px;font-weight:500;letter-spacing:.15em}
+a{color:var(--cyan);text-decoration:none}
+.header-link{font-size:13px;color:var(--muted)}
+main{max-width:900px;margin:0 auto;padding:48px 18px 25px}
+.intro{text-align:center;margin-bottom:25px}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);padding:5px 12px;border-radius:30px;color:var(--cyan);font-size:11px;letter-spacing:.12em}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+h1{font-size:clamp(32px,6vw,51px);line-height:1.12;letter-spacing:-.04em;margin:18px 0 10px}
+.gradient{background:linear-gradient(100deg,var(--blue),var(--cyan));color:transparent;background-clip:text}
+.subtitle{color:var(--muted);margin:0}
+.chat{margin-top:28px;border:1px solid var(--line);border-radius:20px;background:#0b1020eF;overflow:hidden;box-shadow:0 25px 90px #0005}
+.chat-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.status{color:var(--cyan);font-size:12px}
+.small-btn,.tool-btn{background:#10192b;border:1px solid #293650;color:var(--text);border-radius:10px;padding:8px 12px}
+.messages{height:min(48vh,460px);min-height:290px;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:15px;scroll-behavior:smooth}
+.welcome{margin:auto;text-align:center;max-width:440px;color:var(--muted);padding:25px 5px}
+.welcome .orb{font-size:48px;color:var(--cyan);text-shadow:0 0 35px #42e9d755}
+.welcome h2{color:var(--text);margin:6px 0;font-size:22px}
+.message{max-width:88%;padding:12px 15px;border:1px solid var(--line);border-radius:15px;white-space:pre-wrap;overflow-wrap:anywhere}
+.user{align-self:flex-end;background:#13233a;border-color:#29496c}
+.assistant{align-self:flex-start;background:#101626}
+.message-label{display:block;font-size:10px;color:var(--cyan);letter-spacing:.12em;margin-bottom:4px}
+.error{color:#ffb4b4}
+.composer{padding:15px;border-top:1px solid var(--line)}
+textarea{width:100%;resize:vertical;min-height:58px;max-height:180px;background:#070c17;color:var(--text);border:1px solid #293650;border-radius:13px;padding:13px;outline:none}
+textarea:focus{border-color:#52dcca}
+.actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:10px}
+.send{background:linear-gradient(100deg,var(--blue),var(--cyan));border:0;color:#07101b;font-weight:800;border-radius:11px;padding:10px 19px}
+.tool-btn{min-width:43px}
+.tool-btn[aria-pressed="true"]{border-color:var(--cyan);color:var(--cyan)}
+.hint{font-size:11px;color:var(--muted);margin-left:auto}
+footer{text-align:center;color:#7787a4;font-size:11px;padding:24px}
+footer a{margin:0 5px}
+button:disabled{opacity:.5;cursor:wait}
+@media(max-width:520px){header{padding:0 15px}main{padding:30px 12px}.messages{padding:13px;min-height:260px}.message{max-width:95%}.hint{width:100%;margin:0}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">∞</div><div>INFINITE X AI<small>PERSONAL AI ASSISTANT</small></div></div>
+  <a class="header-link" href="/">← Portfolio</a>
+</header>
+<main>
+  <section class="intro">
+    <span class="pill"><span class="dot"></span> INFINITE X SYSTEM ONLINE</span>
+    <h1>Your ideas. <span class="gradient">Beyond limits.</span></h1>
+    <p class="subtitle">Ask questions, explore code, learn something new.</p>
+  </section>
+  <section class="chat" aria-label="AI chat">
+    <div class="chat-head">
+      <div><strong>Infinite X AI</strong><div class="status" id="status">● Ready when you are</div></div>
+      <button class="small-btn" id="clear" type="button">Clear chat</button>
+    </div>
+    <div class="messages" id="messages" aria-live="polite">
+      <div class="welcome" id="welcome"><div class="orb">∞</div><h2>How can I help?</h2><p>Ask me about programming, technology, studies, projects or any idea you're exploring.</p></div>
+    </div>
+    <div class="composer">
+      <textarea id="prompt" maxlength="8000" placeholder="Message Infinite X AI… (Enter to send, Shift+Enter for new line)" aria-label="Your message"></textarea>
+      <div class="actions">
+        <button class="send" id="send" type="button">Send ↗</button>
+        <button class="tool-btn" id="mic" type="button" aria-label="Start voice input" title="Voice input">🎙️</button>
+        <button class="tool-btn" id="speak" type="button" aria-pressed="false" title="Read AI replies aloud">🔊</button>
+        <span class="hint" id="hint">Voice availability depends on your browser.</span>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>INFINITE X AI · Built for learning and exploration · <a href="/">Back to Infinite X</a></footer>
+<script>
+(() => {
+  "use strict";
+  const API = "https://infinite-x-ai.amitxinfinity.workers.dev/chat";
+  const $ = id => document.getElementById(id);
+  const messages = $("messages"), promptBox = $("prompt");
+  let history = [], busy = false, voiceReplies = false, recognition = null;
+
+  function setStatus(text) { $("status").textContent = text; }
+  function addMessage(role, text, isError = false) {
+    $("welcome")?.remove();
+    const bubble = document.createElement("div");
+    bubble.className = "message " + (role === "user" ? "user" : "assistant") + (isError ? " error" : "");
+    const label = document.createElement("span");
+    label.className = "message-label";
+    label.textContent = role === "user" ? "YOU" : "INFINITE X AI";
+    const content = document.createElement("div");
+    content.textContent = text;
+    bubble.append(label, content);
+    messages.appendChild(bubble);
+    messages.scrollTop = messages.scrollHeight;
+    return content;
+  }
+
+  function say(text) {
+    if (!voiceReplies || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  async function sendMessage() {
+    const message = promptBox.value.trim();
+    if (!message || busy) return;
+    if (message.length > 8000) return;
+    busy = true;
+    $("send").disabled = true;
+    $("mic").disabled = true;
+    promptBox.value = "";
+    addMessage("user", message);
+    const replyNode = addMessage("assistant", "Thinking…");
+    setStatus("● Thinking");
+    try {
+      const response = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, history })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "Request failed (" + response.status + ").");
+      if (typeof data.reply !== "string" || !data.reply.trim()) throw new Error("The AI returned an empty response.");
+      replyNode.textContent = data.reply;
+      history.push({ role: "user", text: message }, { role: "model", text: data.reply });
+      history = history.slice(-12);
+      say(data.reply);
+      setStatus("● Online");
+    } catch (error) {
+      replyNode.textContent = "Sorry, I couldn't get a response. " + (error.message || "Please try again.");
+      replyNode.parentElement.classList.add("error");
+      setStatus("● Connection issue");
+    } finally {
+      busy = false;
+      $("send").disabled = false;
+      $("mic").disabled = false;
+      promptBox.focus();
+      messages.scrollTop = messages.scrollHeight;
+    }
+  }
+
+  $("send").addEventListener("click", sendMessage);
+  promptBox.addEventListener("keydown", event => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+
+  $("clear").addEventListener("click", () => {
+    history = [];
+    if (recognition) recognition.stop();
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    messages.replaceChildren();
+    const welcome = document.createElement("div");
+    welcome.className = "welcome";
+    welcome.id = "welcome";
+    welcome.innerHTML = '<div class="orb">∞</div><h2>How can I help?</h2><p>Ask me about programming, technology, studies, projects or any idea you are exploring.</p>';
+    messages.appendChild(welcome);
+    setStatus("● Chat cleared");
+  });
+
+  $("speak").addEventListener("click", () => {
+    voiceReplies = !voiceReplies;
+    $("speak").setAttribute("aria-pressed", String(voiceReplies));
+    $("speak").textContent = voiceReplies ? "🔊 On" : "🔊";
+    $("hint").textContent = voiceReplies ? "AI replies will be spoken aloud." : "Voice replies are off.";
+    if (!voiceReplies && "speechSynthesis" in window) window.speechSynthesis.cancel();
+  });
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";
+    recognition.interimResults = true;
+    recognition.continuous = false;
+    recognition.onstart = () => { $("mic").setAttribute("aria-pressed", "true"); setStatus("● Listening…"); };
+    recognition.onresult = event => {
+      let transcript = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) transcript += event.results[i][0].transcript;
+      promptBox.value = transcript;
+    };
+    recognition.onerror = event => { setStatus("● Microphone: " + event.error); };
+    recognition.onend = () => { $("mic").setAttribute("aria-pressed", "false"); if (!busy) setStatus("● Ready when you are"); };
+    $("mic").addEventListener("click", () => {
+      try { recognition.start(); } catch (_) { recognition.stop(); }
+    });
+  } else {
+    $("mic").disabled = true;
+    $("mic").title = "Speech recognition is not supported in this browser.";
+    $("hint").textContent = "Voice input is not supported by this browser. Try a compatible browser.";
+  }
+})();
+</script>
+</body>
+</html>
